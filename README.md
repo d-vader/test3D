@@ -15,4 +15,4 @@
   Contacts
   --------
 
-     o If you have any comments or suggestions, please contact me `EMAIL@mail.ru`
+  If you have any comments or suggestions, please contact me `EMAIL@mail.ru`
