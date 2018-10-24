@@ -2,7 +2,7 @@
 if (WEBGL.isWebGLAvailable() === false) {
     document.body.appendChild(WEBGL.getWebGLErrorMessage());
 }
-var camera, controls, scene, renderer;
+let camera, controls, scene, renderer;
 init();
 //render(); // remove when using next line for animation loop (requestAnimationFrame)
 animate();
@@ -33,91 +33,113 @@ function init() {
 
 
     // world
-    var geometryCylinder = new THREE.CylinderBufferGeometry(0, 10, 30, 4, 1);
-    var geometrySphere = new THREE.SphereGeometry(4, Math.random() * 12, Math.random() * 12);
-    var geometryCube = new THREE.CubeGeometry(4, 4, 4);
+    let geometryCylinder = new THREE.CylinderBufferGeometry(0, 10, 30, 4, 1);
+    let geometrySphere = new THREE.SphereGeometry(5, 32, 32);
+    let geometryCube = new THREE.CubeGeometry(4, 4, 4);
     // geometryCube.scale(10,10,10);
-    var material = new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true});
+    let material = new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true});
 
 
-    var createBtn = document.querySelector(".create");
-    var selectInput = document.querySelector("#figure-type");
-    var selectOptions = {
+    let createBtn = document.querySelector(".create");
+    let selectInput = document.querySelector("#figure-type");
+    let selectOptions = {
         cube: 'cube',
         sphere: 'sphere',
         pyramid: 'pyramid'
     };
-    var scaleInput = document.querySelector("#scale");
-    var idList = document.querySelector(".list");
-    var listItems = document.querySelectorAll('.list-item');
-
+    let scaleInput = document.querySelector("#scale");
+    let idList = document.querySelector(".list");
+    // let listItems = document.querySelectorAll('.list-item');
+    class ListItem {
+        constructor() {
+            // this.mesh = mesh;
+        }
+        staticElement(mesh){
+            let listItem = document.createElement("div");
+            listItem.setAttribute('id', mesh.uuid);
+            listItem.setAttribute('class', 'list-item');
+            idList.appendChild(listItem);
+            let listContent = document.createElement("span");
+            listContent.innerText = mesh.uuid;
+            listItem.appendChild(listContent);
+        }
+        removableElement(mesh){
+            let listItem = document.createElement("div");
+            listItem.setAttribute('id', mesh.uuid);
+            listItem.setAttribute('class', 'list-item');
+            idList.appendChild(listItem);
+            let listContent = document.createElement("span");
+            listContent.innerText = mesh.uuid;
+            listItem.appendChild(listContent);
+            let listClose = document.createElement("div");
+            listClose.setAttribute('class', 'close');
+            listClose.innerText = 'X';
+            listClose.addEventListener('click', function () {
+                this.parentElement.remove();
+                scene.remove(mesh);
+            });
+            listItem.appendChild(listClose);
+        }
+    }
 
 
 
     createBtn.addEventListener("click", function (e) {
         e.preventDefault();
-        var mesh;
+        let mesh;
 
-        if (selectInput.value === selectOptions.cube) {
-            if(scaleInput.value) {
-                geometryCube.scale(scaleInput.value,scaleInput.value,scaleInput.value);
-                scaleInput.value=1;
-            }
+        switch (selectInput.value) {
+            case selectOptions.cube:
+                if(scaleInput.value) {
+                    geometryCube.scale(scaleInput.value,scaleInput.value,scaleInput.value);
+                    scaleInput.value=1;
+                }
+                mesh = new THREE.Mesh(geometryCube, material);
+                break;
 
-            mesh = new THREE.Mesh(geometryCube, material);
+            case selectOptions.sphere:
+                if(scaleInput.value) {
+                    geometrySphere.scale(scaleInput.value,scaleInput.value,scaleInput.value);
+                    scaleInput.value=1;
+                }
+                mesh = new THREE.Mesh(geometrySphere, material);
+                break;
 
+            case selectOptions.pyramid:
+                if(scaleInput.value) {
+                    geometryCylinder.scale(scaleInput.value,scaleInput.value,scaleInput.value);
+                    scaleInput.value=1;
+                }
+                mesh = new THREE.Mesh(geometryCylinder, material);
+                break;
         }
-        else if (selectInput.value === selectOptions.sphere) {
-            if(scaleInput.value) {
-                geometrySphere.scale(scaleInput.value,scaleInput.value,scaleInput.value);
-                scaleInput.value=1;
-            }
-            mesh = new THREE.Mesh(geometrySphere, material);
-        }
-        else  {
-            if(scaleInput.value) {
-                geometryCylinder.scale(scaleInput.value,scaleInput.value,scaleInput.value);
-                scaleInput.value=1;
-            }
-            mesh = new THREE.Mesh(geometryCylinder, material);
-        }
 
-
-
-        // mesh.position.x = Math.random() * 1600 - 800;
-        // mesh.position.y = 0;
-        // mesh.position.z = Math.random() * 1600 - 800;
         mesh.position.x = Math.random() * 300;
         mesh.position.y = 0;
         mesh.position.z = Math.random() * 300;
         mesh.updateMatrix();
         mesh.matrixAutoUpdate = false;
         scene.add(mesh);
-        var listItem = document.createElement("li");
-        listItem.setAttribute('id', mesh.uuid);
-        listItem.innerHTML = '<span>' + mesh.uuid + '</span>' + '<div class="close">X</div>';
-        idList.appendChild(listItem);
 
-        (function(){
-            listItems = document.querySelectorAll('.list li');
-            listItems[listItems.length - 1].querySelector('.close').addEventListener('click', function () {
-                this.parentElement.remove();
-                scene.remove(mesh);
-            })
-        })();
+
+        let listItem = new ListItem();
+        listItem.removableElement(mesh);
+
     });
 
 
 
 
     // lights
-    var light = new THREE.DirectionalLight(0xffffff);
+    let light = new THREE.DirectionalLight(0xffffff);
     light.position.set(1, 1, 1);
     scene.add(light);
-    var light = new THREE.DirectionalLight(0x002288);
+
+    light = new THREE.DirectionalLight(0x002288);
     light.position.set(-1, -1, -1);
     scene.add(light);
-    var light = new THREE.AmbientLight(0x222222);
+
+    light = new THREE.AmbientLight(0x222222);
     scene.add(light);
     //
     window.addEventListener('resize', onWindowResize, false);

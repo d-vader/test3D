@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 body {
   position: relative;
   width: 100vw;
@@ -7,16 +10,33 @@ body {
 
 .head {
   position: absolute;
-  top: 50px;
+  top: 30px;
   left: 0;
+
+  select {
+    width: 100px;
+    height: 25px;
+    margin-right: 10px;
+  }
+  input {
+    width: 100px;
+    height: 25px;
+    margin-right: 10px;
+  }
 }
 .create {
   display: inline-block;
   width: 100px;
-  height: 30px;
+  height: 35px;
   text-align: center;
   border: 1px solid red;
   cursor: pointer;
+  line-height: 35px;
+  font-weight: bold;
+
+  &:hover {
+    box-shadow: 1px 2px 6px #e4cb6f;
+  }
 }
 
 .list {
@@ -25,17 +45,30 @@ body {
   bottom: 50px;
   height: auto;
   max-height: 350px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .list-item {
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 400px;
+  margin-bottom: 5px;
+  padding-right: 10px;
 }
 .uid {
   display: inline-block;
 }
 .close {
   display: inline-block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
   margin-left: 15px;
   cursor: pointer;
   color: red;
+
+  &:hover {
+    background-color: #cccccc;
+  }
 }

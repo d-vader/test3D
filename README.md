@@ -5,7 +5,7 @@
 
   This is my test task for new position
 
-  Installation
+  Get started
   ------------
 
   Run `npm i`
