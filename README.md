@@ -1,5 +1,4 @@
-
-                          Test Task
+  Test Task
 
   What is it?
   -----------
@@ -10,6 +9,7 @@
   ------------
 
   Run `npm i`
+
   Then `npm run build`
 
   Contacts
